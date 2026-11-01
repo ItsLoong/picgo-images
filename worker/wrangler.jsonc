@@ -6,6 +6,7 @@
   "workers_dev": true,
   "vars": {
     "INDEX_URL": "https://raw.githubusercontent.com/ItsLoong/picgo-images/main/images-index.json",
-    "IMAGE_BASE_URL": "https://raw.githubusercontent.com/ItsLoong/picgo-images/main"
+    "IMAGE_BASE_URL": "https://raw.githubusercontent.com/ItsLoong/picgo-images/main",
+    "CACHE_TTL_SECONDS": "3600"
   }
 }
