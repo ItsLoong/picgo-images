@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "itsloong-random-image",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "vars": {
+    "INDEX_URL": "https://raw.githubusercontent.com/ItsLoong/picgo-images/main/images-index.json",
+    "IMAGE_BASE_URL": "https://raw.githubusercontent.com/ItsLoong/picgo-images/main"
+  }
+}
