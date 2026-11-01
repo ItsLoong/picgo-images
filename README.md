@@ -7,7 +7,7 @@
 - 使用 PicGo 上传图片到 GitHub。
 - 按设备、场景和用途组织壁纸与头像。
 - GitHub Actions 自动生成图片索引，记录尺寸、格式、方向和标签。
-- Cloudflare Worker 提供随机图片、条件筛选和 JSON 查询接口。
+- Cloudflare Worker 提供随机图片、条件筛选、JSON 查询和图片边缘缓存分发；GitHub Raw 为图片源站及备用地址。
 - 图片使用普通 Git 管理，不使用 Git LFS。
 
 ## 目录结构
@@ -98,7 +98,7 @@ GitHub 图床配置：
 Worker 位于 `worker/` 目录。部署前检查 `worker/wrangler.jsonc` 中的：
 
 - `INDEX_URL`：本仓库 `main/images-index.json` 的 Raw 地址。
-- `IMAGE_BASE_URL`：本仓库 `main` 分支的 Raw 根地址。
+- `IMAGE_BASE_URL`：本仓库 `main` 分支的 Raw 根地址；Worker 使用它回源，并通过 `/media/` 提供缓存图片。
 
 部署命令：
 
@@ -155,7 +155,7 @@ GET /api/random?type=wallpaper&count=5
 2. GitHub Actions 扫描壁纸和头像目录。
 3. Actions 生成并提交 `images-index.json`。
 4. Cloudflare Worker 缓存索引并按请求条件随机选择图片。
-5. 图片请求通过 302 跳转到 GitHub Raw 图片地址。
+5. 图片请求通过 302 跳转到 Worker `/media/` 图片入口，由 Cloudflare 缓存并从 GitHub Raw 回源；上游异常时回退到 GitHub Raw 直连。
 
 ## 开发测试
 
