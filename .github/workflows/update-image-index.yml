@@ -9,6 +9,7 @@ on:
       - "_image_meta.json"
       - "scripts/build_image_index.py"
       - "scripts/requirements.txt"
+      - ".github/workflows/update-image-index.yml"
   workflow_dispatch:
 
 permissions:
