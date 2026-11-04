@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b111b">
+  <meta name="description" content="ItsLoong 的个人图片画廊。浏览仓库中的壁纸和头像，按场景、设备、方向及关键词筛选。">
+  <title>ItsLoong · Image Archive</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b111b; --panel:#111b28; --border:#253346; --text:#edf3fb; --muted:#97a9bd; --accent:#83ead8; --accent2:#b9b5ff; --shadow:0 18px 65px rgba(0,0,0,.28); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; min-height:100vh; color:var(--text); background:radial-gradient(ellipse 67% 26% at 8% 0%,#18374970,transparent 88%),radial-gradient(ellipse 35% 24% at 100% 9%,#26204465,transparent 95%),var(--bg); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    a { color:inherit; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    .shell { width:min(1490px,calc(100% - 64px)); margin:0 auto; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; height:82px; border-bottom:1px solid #ffffff14; }
+    .brand { display:inline-flex; gap:13px; align-items:center; text-decoration:none; font-weight:750; letter-spacing:.015em; font-size:16px; }
+    .mark { display:inline-grid; place-items:center; height:37px; width:37px; color:#091b1a; border-radius:11px; background:linear-gradient(135deg,#a9f7dd,#61c8e9); font-weight:900; font-size:23px; }
+    .brand small { display:block; color:var(--muted); font-size:10px; font-weight:650; letter-spacing:.23em; margin-top:3px; }
+    .toplinks { display:flex; align-items:center; gap:10px; }
+    .quiet-link { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border:1px solid var(--border); border-radius:10px; text-decoration:none; color:#d9e7f5; font-size:13px; transition:background .2s,border-color .2s; }
+    .quiet-link:hover { background:#ffffff0e; border-color:#4b6877; }
+    .quiet-link svg { height:16px; width:16px; fill:currentColor; }
+    .hero { padding:70px 0 38px; display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:42px; align-items:end; }
+    .eyebrow { display:flex; align-items:center; gap:10px; text-transform:uppercase; color:var(--accent); font-weight:730; letter-spacing:.2em; font-size:11px; }
+    .eyebrow:before { content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 5px #83ead823; }
+    h1 { margin:19px 0 12px; font-size:clamp(37px,5.1vw,72px); letter-spacing:-.065em; line-height:1.1; font-weight:790; }
+    h1 span { color:var(--accent); }
+    .hero p { margin:0; color:var(--muted); font-size:15px; line-height:1.85; max-width:650px; }
+    .statbar { display:grid; grid-template-columns:repeat(3,1fr); gap:0; padding:18px 4px 0; border-top:1px solid #ffffff24; }
+    .statbar > div { padding:4px 11px; }
+    .statbar > div + div { border-left:1px solid #ffffff21; }
+    .statbar strong { font-size:26px; letter-spacing:-.04em; font-variant-numeric:tabular-nums; }
+    .statbar span { display:block; margin-top:5px; color:var(--muted); font-size:11px; white-space:nowrap; }
+    .workspace { margin:18px 0 34px; padding:17px; background:#101b2b9e; border:1px solid var(--border); border-radius:18px; box-shadow:var(--shadow); }
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    .tabs { display:flex; gap:6px; flex-wrap:wrap; }
+    .tab { border:1px solid transparent; color:#afc2d6; border-radius:10px; padding:11px 17px; background:transparent; font-size:13px; font-weight:700; transition:.2s; }
+    .tab:hover { color:#fff; background:#23334980; }
+    .tab[aria-pressed="true"] { color:#0d2422; background:var(--accent); }
+    .result { font-size:12px; color:var(--muted); white-space:nowrap; padding:0 5px; font-variant-numeric:tabular-nums; }
+    .filters { display:grid; grid-template-columns:minmax(210px,1.7fr) repeat(4,minmax(110px,1fr)); gap:11px; margin-top:14px; }
+    .searchfield { position:relative; }
+    .searchfield svg { width:17px; height:17px; position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); }
+    .control { appearance:none; outline:none; width:100%; height:44px; color:#dfeaf6; background:#0b1522; border:1px solid #29394b; border-radius:10px; padding:0 12px; font-size:12px; transition:border .2s; }
+    .control:hover,.control:focus { border-color:#6cb3ba; }
+    input.control { padding-left:42px; }
+    input::placeholder { color:#71859c; }
+    select.control { cursor:pointer; }
+    .sectiontop { margin:30px 0 18px; display:flex; justify-content:space-between; align-items:end; gap:15px; }
+    .sectiontop h2 { margin:0; font-size:20px; letter-spacing:-.025em; }
+    .sectiontop p { margin:7px 0 0; font-size:12px; color:var(--muted); }
+    .badges { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .smallbadge { border:1px solid #324555; border-radius:99px; padding:6px 10px; color:#bdd1e5; font-size:11px; }
+    .gallery { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:17px; }
+    .tile { display:block; width:100%; min-width:0; padding:0; text-align:left; background:#142032; border:1px solid #263748; border-radius:15px; overflow:hidden; color:var(--text); box-shadow:0 5px 22px #00000024; transition:transform .22s,border-color .22s,box-shadow .22s; }
+    .tile:hover { transform:translateY(-4px); border-color:#80b9bb; box-shadow:0 16px 38px #0000005a; }
+    .thumb { position:relative; aspect-ratio:4/3; overflow:hidden; background:linear-gradient(120deg,#233347,#141d2a); }
+    .thumb img { display:block; width:100%; height:100%; object-fit:cover; transition:transform .4s; color:var(--muted); }
+    .tile:hover .thumb img { transform:scale(1.045); }
+    .thumb .chip { position:absolute; top:12px; left:12px; background:#07101bcb; backdrop-filter:blur(10px); border:1px solid #ffffff27; border-radius:7px; padding:6px 9px; font-size:10px; color:#e1fbf7; }
+    .tilebody { padding:13px 14px 15px; }
+    .tilename { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:13px; font-weight:700; }
+    .tilemeta { display:flex; justify-content:space-between; gap:8px; color:var(--muted); font-size:11px; margin-top:8px; }
+    .tilemeta span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .empty { grid-column:1/-1; padding:72px 16px; text-align:center; border:1px dashed #41556b; border-radius:17px; color:var(--muted); background:#121d2b91; }
+    .empty strong { display:block; color:var(--text); font-size:17px; margin-bottom:9px; }
+    .loadmore { display:block; min-width:220px; margin:30px auto 20px; padding:13px 18px; background:#1d3541; color:#d6f8ef; border:1px solid #3f6573; border-radius:10px; font-size:13px; font-weight:700; }
+    .loadmore:hover { background:#284a55; }
+    .loadmore[hidden] { display:none; }
+    footer { margin-top:65px; padding:25px 0 45px; display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; border-top:1px solid #ffffff1a; color:#8194aa; font-size:12px; }
+    footer a { color:#b2c8db; }
+    dialog { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); margin:0; width:min(1150px,calc(100vw - 30px)); max-height:calc(100dvh - 32px); padding:0; color:var(--text); background:#111a27; border:1px solid #405367; border-radius:19px; box-shadow:0 30px 100px #000a; overflow:hidden; }
+    dialog::backdrop { background:#030810dc; backdrop-filter:blur(8px); }
+    .modalhead { height:60px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 20px; border-bottom:1px solid var(--border); }
+    .modalhead strong { font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .modalhead .iconbutton { font-size:25px; }
+    .iconbutton { display:inline-grid; place-items:center; width:36px; height:36px; border:1px solid #394759; border-radius:10px; background:#1a2634; color:#ecf5fb; }
+    .iconbutton:hover { border-color:#83ead8; }
+    .modalcontent { display:grid; grid-template-columns:minmax(0,1fr) 270px; max-height:calc(100dvh - 94px); min-height:360px; }
+    .fullimage { display:grid; place-items:center; position:relative; min-width:0; min-height:350px; overflow:auto; background:#070c13; }
+    .fullimage img { display:block; max-width:100%; max-height:calc(100dvh - 104px); object-fit:contain; }
+    .fullimage .overlaycontrols { position:absolute; bottom:18px; display:flex; gap:10px; }
+    .modalaside { display:flex; flex-direction:column; gap:17px; overflow:auto; padding:22px; border-left:1px solid var(--border); }
+    .asidekey { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.13em; margin-bottom:5px; }
+    .asidevalue { overflow-wrap:anywhere; font-size:13px; }
+    .taglist { display:flex; flex-wrap:wrap; gap:6px; }
+    .tag { border:1px solid #405568; border-radius:7px; font-size:11px; color:#c2e2e9; padding:6px 9px; }
+    .action { width:100%; padding:12px 10px; text-align:center; background:#19313b; color:#c7f0e8; border:1px solid #376d73; border-radius:10px; font-size:12px; font-weight:700; text-decoration:none; }
+    .action:hover { background:#24434e; }
+    .action.primary { background:var(--accent); border-color:var(--accent); color:#092421; }
+    .action.primary:hover { background:#b1ffeb; }
+    .asidebottom { margin-top:auto; display:grid; gap:9px; }
+    .muted { color:var(--muted); font-size:11px; line-height:1.6; }
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(30px); opacity:0; background:#c1f9e8; color:#08372d; border-radius:9px; padding:12px 18px; box-shadow:0 15px 35px #0006; font-size:13px; font-weight:750; pointer-events:none; transition:opacity .2s,transform .2s; z-index:10; }
+    .toast.visible { opacity:1; transform:translateX(-50%) translateY(0); }
+    @media(max-width:1080px) { .gallery { grid-template-columns:repeat(3,minmax(0,1fr)); } .filters { grid-template-columns:repeat(3,minmax(120px,1fr)); } .searchfield { grid-column:1/-1; } }
+    @media(max-width:750px) { .shell { width:min(100% - 28px,650px); } .topbar { height:66px; } .toplinks .quiet-link span { display:none; } .hero { grid-template-columns:1fr; padding:42px 0 12px; gap:27px; } .hero p { font-size:13px; } .statbar { max-width:480px; } .workspace { padding:12px; } .toolbar { align-items:flex-start; } .filters { grid-template-columns:repeat(2,minmax(0,1fr)); } .gallery { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } .tilebody { padding:10px; } .tilemeta { font-size:10px; } .modalcontent { grid-template-columns:1fr; overflow:auto; } .fullimage { min-height:230px; } .fullimage img { max-height:48vh; } .modalaside { border-left:0; border-top:1px solid var(--border); padding:17px; } .asidebottom { margin-top:0; } dialog { overflow:auto; } }
+    @media(max-width:420px) { .gallery { gap:9px; } .brand { font-size:13px; } .toplinks { gap:6px; } .quiet-link { padding:9px; } .tab { padding:10px 12px; } .tilemeta { display:block; } .tilemeta span + span { display:none; } }
+    @media(prefers-reduced-motion:reduce) { *,*:before,*:after { transition:none!important; scroll-behavior:auto!important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="ItsLoong 图库首页"><span class="mark">L</span><span>ItsLoong <small>IMAGE ARCHIVE</small></span></a>
+      <nav class="toplinks" aria-label="外部链接">
+        <a class="quiet-link" href="https://github.com/ItsLoong/picgo-images" target="_blank" rel="noopener noreferrer" aria-label="查看 GitHub 仓库"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.12c-3.13.68-3.8-1.33-3.8-1.33-.51-1.3-1.25-1.64-1.25-1.64-1.02-.7.08-.68.08-.68 1.13.08 1.72 1.16 1.72 1.16 1 .1.77 2.07 3.29 1.33.1-.73.39-1.24.71-1.52-2.5-.28-5.12-1.25-5.12-5.55 0-1.23.44-2.24 1.16-3.03-.12-.28-.5-1.44.11-3 0 0 .95-.3 3.1 1.16a10.8 10.8 0 0 1 5.65 0c2.14-1.45 3.08-1.16 3.08-1.16.62 1.56.23 2.72.12 3 .72.79 1.16 1.8 1.16 3.03 0 4.31-2.62 5.26-5.13 5.54.4.35.75 1.03.75 2.08v3.08c0 .31.2.65.78.54A11.2 11.2 0 0 0 12 .8Z"/></svg><span>GitHub 仓库</span></a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">The visual collection</div>
+          <h1>图片<span>档案馆.</span></h1>
+          <p>壁纸、插画与头像，一站式浏览。所有图片来自 ItsLoong 的 GitHub 仓库，自动跟随图片索引更新。点击任意图片可查看原图、尺寸和文件信息。</p>
+        </div>
+        <div class="statbar" aria-label="图库统计">
+          <div><strong id="totalCount">—</strong><span>张图片</span></div>
+          <div><strong id="sceneCount">—</strong><span>个场景</span></div>
+          <div><strong id="storageCount">—</strong><span>资源大小</span></div>
+        </div>
+      </section>
+
+      <section aria-label="筛选图片">
+        <div class="workspace">
+          <div class="toolbar">
+            <div class="tabs" role="group" aria-label="图片类型">
+              <button class="tab" type="button" data-type="all" aria-pressed="true">全部图片</button>
+              <button class="tab" type="button" data-type="wallpaper" aria-pressed="false">壁纸</button>
+              <button class="tab" type="button" data-type="avatar" aria-pressed="false">头像</button>
+            </div>
+            <div class="result" id="resultCount" aria-live="polite">正在读取图片索引…</div>
+          </div>
+          <div class="filters">
+            <label class="searchfield" aria-label="搜索图片">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.6" cy="10.6" r="7.2"/><path d="m16 16 5 5"/></svg>
+              <input class="control" id="search" type="search" placeholder="搜索标题、文件名、标签…" autocomplete="off">
+            </label>
+            <select class="control" id="scene" aria-label="场景"><option value="all">所有场景</option></select>
+            <select class="control" id="device" aria-label="设备"><option value="all">所有设备</option><option value="desktop">桌面</option><option value="mobile">手机</option></select>
+            <select class="control" id="orientation" aria-label="方向"><option value="all">所有方向</option><option value="landscape">横向</option><option value="portrait">竖向</option><option value="square">方形</option></select>
+            <select class="control" id="sort" aria-label="排序"><option value="name">按名称排序</option><option value="pixels">按分辨率排序</option><option value="bytes">按文件大小排序</option><option value="random">随机排序</option></select>
+          </div>
+        </div>
+      </section>
+
+      <section aria-label="图片集合">
+        <div class="sectiontop">
+          <div><h2>探索图片</h2><p id="updateTime">数据来自 GitHub 自动生成的图片索引</p></div>
+          <div class="badges"><span class="smallbadge" id="filterBadge">全部资源</span></div>
+        </div>
+        <div class="gallery" id="gallery" aria-live="off"><div class="empty"><strong>正在整理图片…</strong>加载 images-index.json 中的资源信息。</div></div>
+        <button class="loadmore" id="loadmore" type="button" hidden>加载更多图片</button>
+      </section>
+    </main>
+    <footer>
+      <span>© ItsLoong · Built with Cloudflare Pages & GitHub</span>
+      <span>图片版权归原作者所有 · <a href="https://github.com/ItsLoong/picgo-images" target="_blank" rel="noopener noreferrer">查看仓库</a></span>
+    </footer>
+  </div>
+
+  <dialog id="preview" aria-label="图片详情">
+    <div class="modalhead"><strong id="previewName">图片详情</strong><button type="button" class="iconbutton" id="closePreview" aria-label="关闭预览">×</button></div>
+    <div class="modalcontent">
+      <div class="fullimage">
+        <img id="previewImage" alt="">
+        <div class="overlaycontrols">
+          <button class="iconbutton" type="button" id="prev" aria-label="上一张">←</button>
+          <button class="iconbutton" type="button" id="next" aria-label="下一张">→</button>
+        </div>
+      </div>
+      <aside class="modalaside">
+        <div><div class="asidekey">文件路径</div><div class="asidevalue" id="previewPath"></div></div>
+        <div><div class="asidekey">图片尺寸</div><div class="asidevalue" id="previewDimensions"></div></div>
+        <div><div class="asidekey">文件信息</div><div class="asidevalue" id="previewFormat"></div></div>
+        <div><div class="asidekey">分类</div><div class="asidevalue" id="previewCategory"></div></div>
+        <div><div class="asidekey">标签</div><div class="taglist" id="previewTags"></div></div>
+        <div class="asidebottom">
+          <a id="openOriginal" class="action primary" href="#" target="_blank" rel="noopener noreferrer">新窗口查看原图 ↗</a>
+          <button type="button" class="action" id="copyLink">复制图片链接</button>
+          <div class="muted" id="previewPosition">使用 ← → 方向键切换图片</div>
+        </div>
+      </aside>
+    </div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      'use strict';
+      const PAGE_SIZE = 24;
+      const state = {images:[],filtered:[],visible:0,type:'all',scene:'all',device:'all',orientation:'all',sort:'name',term:'',selected:0};
+      const $ = (id) => document.getElementById(id);
+      const gallery = $('gallery');
+      const preview = $('preview');
+      const previewImage = $('previewImage');
+      let toastTimer = null;
+
+      function validPath(path) {
+        if (typeof path !== 'string' || path.length > 800) return false;
+        const segments = path.split('/');
+        if (segments.length < 3 || !['wallpapers','avatars'].includes(segments[0])) return false;
+        if (segments.some((s) => !s || s === '.' || s === '..' || /[\\\u0000-\u001f?#]/.test(s))) return false;
+        return /\.(png|jpe?g|webp|gif|avif)$/i.test(segments[segments.length-1]);
+      }
+      function encodedPath(path) { return path.split('/').map((segment) => encodeURIComponent(segment)).join('/'); }
+      function urlOf(item) { return '/' + encodedPath(item.path); }
+      function fallbackUrl(item) { return 'https://raw.githubusercontent.com/ItsLoong/picgo-images/main/' + encodedPath(item.path); }
+      function displayBytes(n) {
+        n = Number(n) || 0;
+        if (n >= 1024*1024*1024) return (n/(1024*1024*1024)).toFixed(1) + ' GB';
+        if (n >= 1024*1024) return (n/(1024*1024)).toFixed(1) + ' MB';
+        return (n/1024).toFixed(1) + ' KB';
+      }
+      function escapeHtml(value) {
+        return String(value == null ? '' : value).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      }
+      function displayType(item) { return item.type === 'avatar' ? '头像' : '壁纸'; }
+      function addImageFallback(img, item) {
+        img.addEventListener('error', () => {
+          if (img.dataset.fallback !== '1') {
+            img.dataset.fallback = '1';
+            img.src = fallbackUrl(item);
+          }
+        });
+      }
+      function toast(message) {
+        const el = $('toast');
+        el.textContent = message;
+        el.classList.add('visible');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove('visible'), 2200);
+      }
+      function populateScenes() {
+        const scenes = Array.from(new Set(state.images.map((x) => x.scene).filter(Boolean))).sort((a,b) => String(a).localeCompare(String(b),'zh-CN'));
+        const sel = $('scene');
+        scenes.forEach((scene) => {
+          const option = document.createElement('option');
+          option.value = scene;
+          option.textContent = scene;
+          sel.append(option);
+        });
+      }
+      function refreshResults() {
+        const term = state.term.toLocaleLowerCase();
+        state.filtered = state.images.filter((item) => {
+          if (state.type !== 'all' && item.type !== state.type) return false;
+          if (state.scene !== 'all' && item.scene !== state.scene) return false;
+          if (state.device !== 'all' && item.device !== state.device) return false;
+          if (state.orientation !== 'all' && item.orientation !== state.orientation) return false;
+          if (!term) return true;
+          return [item.title,item.path,item.scene,item.device,item.type,...(Array.isArray(item.tags)?item.tags:[])].join(' ').toLocaleLowerCase().includes(term);
+        });
+        if (state.sort === 'name') state.filtered.sort((a,b) => String(a.title || a.path).localeCompare(String(b.title || b.path),'zh-CN', {numeric:true}));
+        if (state.sort === 'pixels') state.filtered.sort((a,b) => (Number(b.width)*Number(b.height)) - (Number(a.width)*Number(a.height)));
+        if (state.sort === 'bytes') state.filtered.sort((a,b) => (Number(b.bytes)||0)-(Number(a.bytes)||0));
+        if (state.sort === 'random') {
+          state.filtered = state.filtered.map((v) => ({v,rand:Math.random()})).sort((a,b) => a.rand-b.rand).map((x) => x.v);
+        }
+        state.visible = 0;
+        gallery.replaceChildren();
+        $('filterBadge').textContent = state.type === 'all' ? '全部资源' : state.type === 'avatar' ? '头像' : '壁纸';
+        $('resultCount').textContent = '匹配 ' + state.filtered.length + ' / ' + state.images.length + ' 张';
+        if (!state.filtered.length) {
+          gallery.innerHTML = '<div class="empty"><strong>没有找到匹配的图片</strong>试试修改关键词或筛选条件。</div>';
+          $('loadmore').hidden = true;
+          return;
+        }
+        renderNext();
+      }
+      function renderNext() {
+        const start = state.visible;
+        const end = Math.min(start + PAGE_SIZE,state.filtered.length);
+        const fragment = document.createDocumentFragment();
+        for (let idx=start;idx<end;idx++) {
+          const item = state.filtered[idx];
+          const tile = document.createElement('button');
+          tile.type = 'button';
+          tile.className = 'tile';
+          tile.dataset.index = String(idx);
+          const title = item.title || item.path.split('/').pop();
+          tile.setAttribute('aria-label','预览 ' + title);
+          tile.innerHTML = '<div class="thumb"><img loading="lazy" decoding="async" alt="' + escapeHtml(title) + '" src="' + escapeHtml(urlOf(item)) + '"><span class="chip">' + escapeHtml(item.scene || displayType(item)) + '</span></div>' +
+            '<div class="tilebody"><div class="tilename">' + escapeHtml(title) + '</div><div class="tilemeta"><span>' +
+            escapeHtml((item.width || '—') + ' × ' + (item.height || '—')) + '</span><span>' + escapeHtml(displayBytes(item.bytes)) + '</span></div></div>';
+          addImageFallback(tile.querySelector('img'),item);
+          fragment.append(tile);
+        }
+        gallery.append(fragment);
+        state.visible=end;
+        $('loadmore').hidden = end >= state.filtered.length;
+        $('loadmore').textContent = '加载更多图片 · ' + end + ' / ' + state.filtered.length;
+      }
+      function showItem(index) {
+        if (!state.filtered.length) return;
+        state.selected = (index + state.filtered.length) % state.filtered.length;
+        const item = state.filtered[state.selected];
+        const title = item.title || item.path.split('/').pop();
+        $('previewName').textContent = title;
+        $('previewPath').textContent = item.path;
+        $('previewDimensions').textContent = (item.width||'—') + ' × ' + (item.height||'—') + ' px';
+        $('previewFormat').textContent = String(item.format||'').toUpperCase() + ' · ' + displayBytes(item.bytes);
+        $('previewCategory').textContent = displayType(item) + (item.device ? ' · ' + item.device : '') + (item.scene ? ' · ' + item.scene : '');
+        $('previewPosition').textContent = (state.selected+1) + ' / ' + state.filtered.length + ' · ← → 切换图片';
+        const tags = $('previewTags');
+        tags.replaceChildren();
+        const listedTags = (Array.isArray(item.tags)&&item.tags.length ? item.tags : [item.scene || '未分类']);
+        listedTags.forEach((tag) => {
+          const el = document.createElement('span'); el.className='tag'; el.textContent=tag; tags.append(el);
+        });
+        const path = urlOf(item);
+        previewImage.dataset.fallback = '0';
+        previewImage.alt = title;
+        previewImage.src = path;
+        $('openOriginal').href = path;
+        if (!preview.open) preview.showModal();
+      }
+      previewImage.addEventListener('error', () => {
+        if (previewImage.dataset.fallback !== '1') {
+          previewImage.dataset.fallback = '1';
+          const item = state.filtered[state.selected];
+          if (item) previewImage.src = fallbackUrl(item);
+        }
+      });
+      gallery.addEventListener('click',(event) => {
+        const tile = event.target.closest('button.tile');
+        if (tile) showItem(Number(tile.dataset.index));
+      });
+      $('loadmore').addEventListener('click',renderNext);
+      $('closePreview').addEventListener('click',() => preview.close());
+      $('prev').addEventListener('click',() => showItem(state.selected - 1));
+      $('next').addEventListener('click',() => showItem(state.selected + 1));
+      preview.addEventListener('click',(event) => { if (event.target===preview) preview.close(); });
+      document.addEventListener('keydown',(event) => {
+        if (!preview.open) return;
+        if (event.key==='ArrowLeft') {event.preventDefault();showItem(state.selected - 1);}
+        if (event.key==='ArrowRight') {event.preventDefault();showItem(state.selected + 1);}
+      });
+      $('copyLink').addEventListener('click',async () => {
+        const item=state.filtered[state.selected];
+        if (!item) return;
+        const href=new URL(urlOf(item),location.origin).href;
+        try {
+          await navigator.clipboard.writeText(href);
+          toast('图片链接已复制');
+        } catch { toast('复制失败，请使用“新窗口查看原图”'); }
+      });
+      document.querySelectorAll('[data-type]').forEach((button) => {
+        button.addEventListener('click',() => {
+          state.type=button.dataset.type;
+          document.querySelectorAll('[data-type]').forEach((b) => b.setAttribute('aria-pressed',String(b===button)));
+          refreshResults();
+        });
+      });
+      $('search').addEventListener('input',(e) => {state.term=e.target.value.trim();refreshResults();});
+      ['scene','device','orientation','sort'].forEach((id) => {
+        $(id).addEventListener('change',(e) => {state[id]=e.target.value;refreshResults();});
+      });
+      async function initialize() {
+        try {
+          const response = await fetch('./images-index.json',{cache:'no-cache'});
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          const index = await response.json();
+          if (!Array.isArray(index.images)) throw new Error('图片索引格式错误');
+          state.images=index.images.filter((item) => item && validPath(item.path));
+          const totalBytes=state.images.reduce((sum,x)=>sum+(Number(x.bytes)||0),0);
+          const scenes=new Set(state.images.map((x)=>x.scene).filter(Boolean));
+          $('totalCount').textContent=state.images.length.toLocaleString('zh-CN');
+          $('sceneCount').textContent=scenes.size.toLocaleString('zh-CN');
+          $('storageCount').textContent=displayBytes(totalBytes);
+          if (index.generated_at) {
+            const date = new Date(index.generated_at);
+            if (!Number.isNaN(date.getTime())) $('updateTime').textContent='图片索引更新：'+date.toLocaleString('zh-CN',{hour12:false});
+          }
+          populateScenes();
+          refreshResults();
+        } catch(err) {
+          console.error('Image archive failed to load',err);
+          $('resultCount').textContent='图片索引暂不可用';
+          gallery.innerHTML='<div class="empty"><strong>读取图片索引失败</strong>请稍后刷新页面重试。<p style="margin-top:14px"><a href="./images-index.json">检查索引文件</a></p></div>';
+        }
+      }
+      initialize();
+    })();
+  </script>
+</body>
+</html>
