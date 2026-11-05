@@ -174,3 +174,18 @@ cd worker
 npm install
 npm test
 ```
+
+
+## 图库页面
+
+首页使用仓库索引提供精选作品、搜索、筛选、原图预览和链接复制。构建时生成最长边 640 像素的 WebP 缩略图，详情页读取原图。
+
+本地构建与预览：
+
+```bash
+python -m pip install -r scripts/requirements.txt
+python scripts/build_gallery.py
+python -m http.server 8765 --directory dist
+```
+
+Cloudflare Pages 连接 `ItsLoong/picgo-images` 的 `main` 分支，构建命令为 `pip install -r scripts/requirements.txt && python scripts/build_gallery.py`，输出目录为 `dist`。构建只发布页面、索引、缩略图和图库资源。新增图片后推送仓库即可触发更新。
